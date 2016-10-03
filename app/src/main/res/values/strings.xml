@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">StepCounter</string>
+
+    <!-- NAVER OPEN API ID, SECRET -->
+    <string name="openapi_id">SJhAefovhyRFQXO58BRx</string>
+    <string name="openapi_secret">w25vdOvycT</string>
+
+    <!-- NAVIGATOR -->
+    <string name="section_dashboard_title">DASHBOARD</string>
+    <string name="section_history_title">HISTORY</string>
+
+    <!-- MESSAGE -->
+    <string name="cannot_count_message">Count sensor not available in this device</string>
+
+</resources>
