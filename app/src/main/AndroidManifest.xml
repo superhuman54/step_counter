@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.navercorp.recruit.kimkihwan.stepcounter">
+    package="com.kimkihwan.me.stepcounter">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -13,16 +13,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <service android:name=".service.SensorService" />
-        <service android:name=".service.LocationService" />
+        <service android:name="com.kimkihwan.me.stepcounter.service.SensorService" />
+        <service android:name="com.kimkihwan.me.stepcounter.service.LocationService" />
 
         <provider
-            android:name=".provider.StepCounterProvider"
-            android:authorities="com.navercorp.recruit.kimkihwan.stepcounter.provider"
+            android:name="com.kimkihwan.me.stepcounter.provider.StepCounterProvider"
+            android:authorities="com.kimkihwan.me.stepcounter.provider"
             android:exported="true" />
 
         <activity
-            android:name=".activity.TabbedActivity"
+            android:name="com.kimkihwan.me.stepcounter.activity.TabbedActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
