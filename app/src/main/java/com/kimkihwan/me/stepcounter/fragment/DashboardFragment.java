@@ -3,6 +3,9 @@ package com.kimkihwan.me.stepcounter.fragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.ContentObserver;
+import android.databinding.DataBindingUtil;
+import android.databinding.ObservableField;
+import android.databinding.ObservableInt;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
@@ -18,6 +21,7 @@ import android.widget.ToggleButton;
 
 import com.kimkihwan.me.stepcounter.R;
 import com.kimkihwan.me.stepcounter.database.DatabaseOperator;
+import com.kimkihwan.me.stepcounter.databinding.FragmentDashboardBinding;
 import com.kimkihwan.me.stepcounter.model.Footprint;
 import com.kimkihwan.me.stepcounter.model.Snapshot;
 import com.kimkihwan.me.stepcounter.model.StepCounter;
@@ -43,12 +47,11 @@ import static android.content.Context.SENSOR_SERVICE;
 public class DashboardFragment extends SectionFragment implements CompoundButton.OnCheckedChangeListener {
 
     private ToggleButton start;
-    private TextView steps; // indicates steps taken so far
-    private TextView distance; // indicates the distance tracked so far
-    private TextView address; // for the spot you are now
 
     private static final String KEY_RUNNING = "running";
     private SharedPreferences preferences;
+
+    private FragmentDashboardBinding binding;
 
     private ContentObserver observer = new ContentObserver(new Handler()) {
         @Override
@@ -69,25 +72,22 @@ public class DashboardFragment extends SectionFragment implements CompoundButton
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-
-        View rootView = inflater.inflate(R.layout.fragment_dashboard, container, false);
-        start = (ToggleButton) rootView.findViewById(R.id.start);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_dashboard, container, false);
+        binding.setSnapshot(new ObservableSnapshot());
+        start = binding.start;
         start.setOnCheckedChangeListener(this);
-        steps = (TextView) rootView.findViewById(R.id.steps);
-        distance = (TextView) rootView.findViewById(R.id.distance);
-        address = (TextView) rootView.findViewById(R.id.address);
 
         getContext().getContentResolver().registerContentObserver(StepCounterContract.StepCounter.CONTENT_URI, true, observer);
         getContext().getContentResolver().registerContentObserver(StepCounterContract.Footprint.CONTENT_URI, true, observer);
 
         if (!canCount()) {
-            TextView warning = (TextView) rootView.findViewById(R.id.warning);
+            TextView warning = binding.warning;
             warning.setVisibility(View.VISIBLE);
         }
         if (preferences.getBoolean(KEY_RUNNING, false)) {
             start.performClick();
         }
-        return rootView;
+        return binding.getRoot();
     }
 
     private boolean canCount() {
@@ -129,12 +129,21 @@ public class DashboardFragment extends SectionFragment implements CompoundButton
                     public void onNext(Snapshot snapshot) {
                         StepCounter sc = snapshot.getStepCounter();
                         Footprint f = snapshot.getFootprint();
+                        ObservableSnapshot observableSnapshot = binding.getSnapshot();
+
                         if (sc != null) {
-                            steps.setText(String.valueOf(sc.getSteps()));
-                            distance.setText(UnitUtils.forDisplay(sc.getDistance()));
+                            observableSnapshot
+                                    .steps
+                                    .set(sc.getSteps());
+
+                            observableSnapshot
+                                    .distance
+                                    .set(UnitUtils.forDisplay(sc.getDistance()));
                         }
                         if (f != null) {
-                            address.setText(f.getAddress());
+                            observableSnapshot
+                                    .address
+                                    .set(f.getAddress());
                         }
                     }
                 });
@@ -162,5 +171,17 @@ public class DashboardFragment extends SectionFragment implements CompoundButton
             getContext().stopService(sensorIntent);
             getContext().stopService(locationIntent);
         }
+    }
+
+    public static class ObservableSnapshot {
+        public final ObservableInt steps =
+                new ObservableInt();
+
+        public final ObservableField<String> distance =
+                new ObservableField<>();
+
+        public final ObservableField<String> address =
+                new ObservableField<>();
+
     }
 }
