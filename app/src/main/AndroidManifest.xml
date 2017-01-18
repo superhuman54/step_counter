@@ -31,9 +31,6 @@
             </intent-filter>
         </activity>
 
-        <meta-data android:name="com.naver.openapi.client.id" android:value="@string/openapi_id" />
-        <meta-data android:name="com.naver.openapi.client.secret" android:value="@string/openapi_secret" />
-
     </application>
 
 

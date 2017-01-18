@@ -7,6 +7,7 @@ import android.util.Pair;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.kimkihwan.me.stepcounter.BuildConfig;
 import com.kimkihwan.me.stepcounter.logger.Log;
 
 import java.io.IOException;
@@ -39,7 +40,7 @@ public class NaverServiceClient {
     }
 
     private NaverServiceClient(Context ctx) {
-        final Pair<String, String> auth = clientKeys(ctx);
+//        final Pair<String, String> auth = clientKeys(ctx);
 
         Gson gson = new GsonBuilder()
                 .create();
@@ -50,8 +51,8 @@ public class NaverServiceClient {
                     public Response intercept(Chain chain) throws IOException {
                         Request request = chain.request().newBuilder()
                                 .addHeader("Content-Type", "application/json")
-                                .addHeader("X-Naver-Client-Id", auth.first)
-                                .addHeader("X-Naver-Client-Secret", auth.second)
+                                .addHeader("X-Naver-Client-Id", BuildConfig.NAVER_CLIENT_ID)
+                                .addHeader("X-Naver-Client-Secret", BuildConfig.NAVER_CLIENT_SECRET)
                                 .build();
                         return chain.proceed(request);
                     }

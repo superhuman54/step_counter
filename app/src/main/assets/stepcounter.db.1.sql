@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS stepcounter (
     updated_datetime TEXT NULL
 );
 
-CREATE TABLE IF NOT EXISTS footprint (
+CREATE TABLE IF NOT EXISTS footprint
     started_date TEXT PRIMARY KEY,
     latitude DOUBLE DEFAULT 0,
     longitude DOUBLE DEFAULT 0,

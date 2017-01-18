@@ -21,8 +21,8 @@ android {
         }
 
         debug {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "NAVER_CLIENT_ID", "\"${naver_openapi_client_id}\""
+            buildConfigField "String", "NAVER_CLIENT_SECRET", "\"${naver_openapi_client_secret}\""
         }
     }
 }
